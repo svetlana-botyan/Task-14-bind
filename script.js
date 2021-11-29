@@ -58,16 +58,11 @@ class TodoLists {
     this.handleEventNeed = this.#handleEventNeed.bind(this)
     this.handleBeforeUnload = this.#handleBeforeUnload.bind(this)
     this.handleDOMReady = this.#handleDOMReady.bind(this)
-    this.handleClickButtonRemove = this.#handleClickButtonRemove.bind(this)
 
     this.listParentElement.addEventListener('change', this.handleChange)
     window.addEventListener('render:need', this.handleEventNeed)
     window.addEventListener('beforeunload', this.handleBeforeUnload)
-    window.addEventListener('DOMContentLoaded', this.handleDOMReady)
-    this.listParentElement.addEventListener(
-      'click',
-      this.handleClickButtonRemove
-    )
+    window.addEventListener('DOMContentLoaded', this.handleDOMReady)   
   }
 
   #handleChange(event) {
@@ -152,22 +147,6 @@ class TodoLists {
     }
   }
 
-  //удаление задачи
-  #handleClickButtonRemove(event) {
-    const { role, id } = event.target.dataset
-
-    if (role == 'remove') {
-      data = data.filter((item) => {
-        if (item.id == id) {
-          return false
-        } else {
-          return true
-        }
-      })
-
-      this.render()
-    }
-  }
 }
 
 // --------------------------------------------------------------
@@ -182,11 +161,16 @@ class EditTodoElement {
     this.#init()
   }
 
-  #init() {
+  #init() {    
+    this.handleClickButtonRemove = this.#handleClickButtonRemove.bind(this)
     this.handleClickButtonEdit = this.#handleClickButtonEdit.bind(this)
     this.handleClickButtonCancilEdit = this.#handleClickButtonCancilEdit.bind(this)
     this.handleFormEditSubmit = this.#handleFormEditSubmit.bind(this)
 
+    this.listParentElement.addEventListener(
+      'click',
+      this.handleClickButtonRemove
+    )
     this.listParentElement.addEventListener('click', this.handleClickButtonEdit)
     this.listParentElement.addEventListener(
       'click',
@@ -194,6 +178,23 @@ class EditTodoElement {
     )
     this.listParentElement.addEventListener('submit', this.handleFormEditSubmit)
   }
+
+    //удаление задачи
+    #handleClickButtonRemove(event) {
+      const { role, id } = event.target.dataset
+  
+      if (role == 'remove') {
+        data = data.filter((item) => {
+          if (item.id == id) {
+            return false
+          } else {
+            return true
+          }
+        })
+  
+        window.dispatchEvent(this.eventRenderNeed)
+      }
+    }
 
   #handleClickButtonEdit(event) {
     const { target } = event
@@ -285,7 +286,6 @@ class EditTodoElement {
   }
 
 }
-
 
 
 class AddNewGroup {
