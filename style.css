@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+}
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: solid 2px rgb(13, 110, 253);
+    padding: 20px 15px;
+}
+
+.data-input {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.select-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.accordion-button {
+    background-color: rgba(13, 109, 253, 0.753);
+}
+
+.submit {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+h1 {
+    color: rgba(13, 109, 253, 0.753);
+    margin-bottom: 20px;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.accordion-button {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+#commonGroup, #workGroup, #personalGroup, #educationGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.new-task {
+    border-bottom: 1px solid rgba(13, 109, 253, 0.753);
+    padding: 2px 0;
+    display: flex;
+}
+.new-task.checked {
+    order: 1;
+}
+
+.new-task>.form-check {
+    flex-grow: 1;
+    display: flex;
+    height: 36px;
+    align-items: center;
+}
+
+.form-check-input{
+    margin:  0;
+}
+
+
+.hourglassSplit, .hourglass{
+    margin: 0 5px;
+}
+
+.form-check-input:checked~label {
+    text-decoration: line-through;
+}
+
+.new-task>button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+
+
