@@ -2,7 +2,7 @@ let data = []
 const formElement = document.querySelector('#form')
 const listParentElement = document.querySelector('#listParent')
 const selectPriorityElement = formElement.querySelector('#priority')
-//const buttonNewGroupElement = formElement.querySelector('#addCategory')
+const buttonNewListElement = formElement.querySelector('#addCategory')
 
 const listElements = {
   commonGroup: document.querySelector('#commonGroup'),
@@ -32,7 +32,7 @@ class ToDoFormCreate {
       index: selectPriorityElement.options.selectedIndex,
     }
 
-    const fromData = new FormData(formElement)
+    const fromData = new FormData(this.formElement)
     for (let [name, value] of fromData.entries()) {
       toDo[name] = value
     }
@@ -62,7 +62,7 @@ class TodoLists {
     this.listParentElement.addEventListener('change', this.handleChange)
     window.addEventListener('render:need', this.handleEventNeed)
     window.addEventListener('beforeunload', this.handleBeforeUnload)
-    window.addEventListener('DOMContentLoaded', this.handleDOMReady)   
+    window.addEventListener('DOMContentLoaded', this.handleDOMReady)
   }
 
   #handleChange(event) {
@@ -146,7 +146,6 @@ class TodoLists {
       this.render()
     }
   }
-
 }
 
 // --------------------------------------------------------------
@@ -155,16 +154,17 @@ class EditTodoElement {
   isEdit = false
   currentEditedToDo = {}
   eventRenderNeed = new Event('render:need')
-  
+
   constructor(listParentElement) {
     this.listParentElement = listParentElement
     this.#init()
   }
 
-  #init() {    
+  #init() {
     this.handleClickButtonRemove = this.#handleClickButtonRemove.bind(this)
     this.handleClickButtonEdit = this.#handleClickButtonEdit.bind(this)
-    this.handleClickButtonCancilEdit = this.#handleClickButtonCancilEdit.bind(this)
+    this.handleClickButtonCancilEdit =
+      this.#handleClickButtonCancilEdit.bind(this)
     this.handleFormEditSubmit = this.#handleFormEditSubmit.bind(this)
 
     this.listParentElement.addEventListener(
@@ -179,40 +179,40 @@ class EditTodoElement {
     this.listParentElement.addEventListener('submit', this.handleFormEditSubmit)
   }
 
-    //удаление задачи
-    #handleClickButtonRemove(event) {
-      const { role, id } = event.target.dataset
-  
-      if (role == 'remove') {
-        data = data.filter((item) => {
-          if (item.id == id) {
-            return false
-          } else {
-            return true
-          }
-        })
-  
-        window.dispatchEvent(this.eventRenderNeed)
-      }
+  //удаление задачи
+  #handleClickButtonRemove(event) {
+    const { role, id } = event.target.dataset
+
+    if (role == 'remove') {
+      data = data.filter((item) => {
+        if (item.id == id) {
+          return false
+        } else {
+          return true
+        }
+      })
+
+      window.dispatchEvent(this.eventRenderNeed)
     }
+  }
 
   #handleClickButtonEdit(event) {
     const { target } = event
     const { role, id } = target.dataset
-  
+
     if (role == 'edit') {
       // запрет на одновременное редактирование
       if (this.isEdit == true) {
         return
       }
-  
+
       data.forEach((item) => {
         if (item.id == id) {
           const { parentElement } = target
           this.currentEditedToDo = item //значения исходные задачи
           console.log(item)
           const blockEditElement = this.blockEditTemplate(item) // item объект каждой toDo
-  
+
           parentElement.outerHTML = blockEditElement
           this.isEdit = true
         }
@@ -220,7 +220,6 @@ class EditTodoElement {
     }
   }
 
-  
   blockEditTemplate({ textContent }) {
     const templateEdit = ` 
       <form data-role="editForm" id="formEdit" class="d-flex col-12">
@@ -245,61 +244,78 @@ class EditTodoElement {
         </svg></button>
   </form>
   `
-  
+
     return templateEdit
   }
 
-#handleClickButtonCancilEdit(event) {
-  const { role } = event.target.dataset
-  // console.log(role)
+  #handleClickButtonCancilEdit(event) {
+    const { role } = event.target.dataset
+    // console.log(role)
 
-  if (role == 'cancel') {
-    window.dispatchEvent(this.eventRenderNeed)
-    this.isEdit = false
+    if (role == 'cancel') {
+      window.dispatchEvent(this.eventRenderNeed)
+      this.isEdit = false
+    }
   }
-}
 
   #handleFormEditSubmit(event) {
     event.preventDefault()
-  
+
     const { target } = event
     console.log(target)
     const { role, id } = target.dataset
-  
+
     if (role == 'editForm') {
       const textContent = target.querySelector('[name="textContent"]').value
       const group = target.querySelector('[name="group"]').value
       const selectPriorityElement = target.querySelector(
         '[name="priorityContent"]'
       )
-  
+
       //console.log(selectPriorityElement)
       const index = selectPriorityElement.options.selectedIndex
-  
+
       this.currentEditedToDo.textContent = textContent
       this.currentEditedToDo.group = group
       this.currentEditedToDo.index = index
-   
+
       window.dispatchEvent(this.eventRenderNeed)
       this.isEdit = false
     }
   }
-
 }
-
 
 class AddNewGroup {
-  
-//добавление нового списка
-// function handleClickButtonNewList(event) {
-//   event.preventDefault()
-//   let nameNewList = prompt(' Введите название нового списка')
-// }
-}
+  listlistsGroup = document.querySelector('#listsGroup')
 
-//buttonNewListElement.addEventListener('click', handleClickButtonNewList)
+  constructor(buttonNewListElement) {
+    this.buttonNewListElement = buttonNewListElement
+    this.handleClickButtonNewList = this.#handleClickButtonNewList.bind(this)
+    this.buttonNewListElement.addEventListener(
+      'click',
+      this.handleClickButtonNewList
+    )
+  }
+
+  #handleClickButtonNewList() {
+    const newNameList = prompt('введите новую категорию')
+
+    this.renderForm()
+  }
+
+  renderForm(){
+
+    
+  }
+
+  templateForm(){
+    return `
+    <option value="educationGroup">${this.newNameList}</option>`
+  }
+
+}
 
 new ToDoFormCreate(formElement)
 new TodoLists(listParentElement)
 new EditTodoElement(listParentElement)
-//new AddNewGroup(buttonNewGroupElement)
+new AddNewGroup(buttonNewListElement)
