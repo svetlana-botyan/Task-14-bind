@@ -38,7 +38,7 @@ class ToDoFormCreate {
     }
 
     data.push(toDo)
-    formElement.reset()
+    this.formElement.reset()
 
     const eventRenderNeed = new Event('render:need')
     window.dispatchEvent(eventRenderNeed)
@@ -150,7 +150,7 @@ class TodoLists {
 
 // --------------------------------------------------------------
 
-class EditTodoElement {
+class ModifiedToDoList {
   isEdit = false
   currentEditedToDo = {}
   eventRenderNeed = new Event('render:need')
@@ -225,13 +225,11 @@ class EditTodoElement {
       <form data-role="editForm" id="formEdit" class="d-flex col-12">
     <input  value="${textContent}" name="textContent" class="form-control   " placeholder="Отредакрируйте задачу" type="text" required>
        <select name="priorityContent" class="form-select">
-        <option disabled selected value="">Приоретет</option>
-        <option value="urgent">срочно</option>
+        <option selected value="urgent">срочно</option>
         <option value="non-urgent">несрочно</option>
       </select>
       <select   name="group" class=" form-select select-content" >
-        <option disabled selected value="">Изменить список</option>
-        <option value="commonGroup">Общее</option>
+        <option selected value="commonGroup">Общее</option>
         <option value="workGroup">Работа</option>
         <option value="personalGroup">Личное</option>
         <option value="educationGroup">Обучение</option>
@@ -285,37 +283,7 @@ class EditTodoElement {
   }
 }
 
-class AddNewGroup {
-  listlistsGroup = document.querySelector('#listsGroup')
-
-  constructor(buttonNewListElement) {
-    this.buttonNewListElement = buttonNewListElement
-    this.handleClickButtonNewList = this.#handleClickButtonNewList.bind(this)
-    this.buttonNewListElement.addEventListener(
-      'click',
-      this.handleClickButtonNewList
-    )
-  }
-
-  #handleClickButtonNewList() {
-    const newNameList = prompt('введите новую категорию')
-
-    this.renderForm()
-  }
-
-  renderForm(){
-
-    
-  }
-
-  templateForm(){
-    return `
-    <option value="educationGroup">${this.newNameList}</option>`
-  }
-
-}
-
 new ToDoFormCreate(formElement)
 new TodoLists(listParentElement)
-new EditTodoElement(listParentElement)
-new AddNewGroup(buttonNewListElement)
+new ModifiedToDoList(listParentElement)
+
